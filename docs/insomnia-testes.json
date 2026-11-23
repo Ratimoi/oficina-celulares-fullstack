@@ -1,0 +1,579 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_source": "insomnia.desktop.app:v2023.5.8",
+  "resources": [
+    {
+      "_id": "wrk_3a668e05ec4244e1ab961794c5e13ce6",
+      "_type": "workspace",
+      "parentId": null,
+      "name": "Oficina Celulares - Testes",
+      "scope": "collection"
+    },
+    {
+      "_id": "env_64a113f75c2c4dffa3cb86fb99fcdd9a",
+      "_type": "environment",
+      "parentId": "wrk_3a668e05ec4244e1ab961794c5e13ce6",
+      "name": "Base Environment",
+      "data": {
+        "base_url": "http://localhost:3000"
+      }
+    },
+    {
+      "_id": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "_type": "request_group",
+      "parentId": "wrk_3a668e05ec4244e1ab961794c5e13ce6",
+      "name": "1. Preparação (rodar em ordem)",
+      "metaSortKey": 1
+    },
+    {
+      "_id": "req_414e32468fdc4722b45267d5027dd3b8",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "T1 · Criar usuário com senha fraca → 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/usuarios",
+      "metaSortKey": 2,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Teste\",\n  \"email\": \"fraco@teste.com\",\n  \"senha\": \"abc\"\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_8267e007ced542a7b84a713c7790f711",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Criar usuário teste → 201 (400 se já existir)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/usuarios",
+      "metaSortKey": 3,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Tester\",\n  \"email\": \"tester@teste.com\",\n  \"senha\": \"Senha123\"\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_7d5bea196d13459282440ebdf0078155",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "T2 · Login com senha errada → 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "metaSortKey": 4,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"tester@teste.com\",\n  \"senha\": \"Errada123\"\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_c2d5a995d6654e93a04dd6c70f5bc4a4",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Login OK → 200 + token",
+      "method": "POST",
+      "url": "{{ _.base_url }}/login",
+      "metaSortKey": 5,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"email\": \"tester@teste.com\",\n  \"senha\": \"Senha123\"\n}"
+      },
+      "authentication": {}
+    },
+    {
+      "_id": "req_e9d0f077c9a34d169a9232ff9955e5af",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "T11 · Listar clientes SEM token → 401",
+      "method": "GET",
+      "url": "{{ _.base_url }}/clientes",
+      "metaSortKey": 6,
+      "headers": [],
+      "body": {},
+      "authentication": {}
+    },
+    {
+      "_id": "req_90135223f81e40aa99ff7bfdd0a17571",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Criar serviço Troca de tela",
+      "method": "POST",
+      "url": "{{ _.base_url }}/servicos",
+      "metaSortKey": 7,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"descricao\": \"Troca de tela (teste)\",\n  \"preco\": 350.0\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_69a1e54a559d44e781422cf9db95750f",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Criar serviço Troca de bateria",
+      "method": "POST",
+      "url": "{{ _.base_url }}/servicos",
+      "metaSortKey": 8,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"descricao\": \"Troca de bateria (teste)\",\n  \"preco\": 120.5\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_870c329bf4be4aa18d61c4d83970b321",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Criar cliente",
+      "method": "POST",
+      "url": "{{ _.base_url }}/clientes",
+      "metaSortKey": 9,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"nome\": \"Cliente Teste\",\n  \"telefone\": \"53999990000\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_7e920c52b76846c68f16120e52586f38",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "T3 · Aparelho com IMEI inválido → 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/aparelhos",
+      "metaSortKey": 10,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"marca\": \"Samsung\",\n  \"modelo\": \"A54\",\n  \"imei\": \"123\",\n  \"clienteId\": {% response 'body', 'req_870c329bf4be4aa18d61c4d83970b321', 'b64::JC5pZA==::46b', 'never', 60 %}\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_5280249ce9554d4d8ce9fbb770a57f1c",
+      "_type": "request",
+      "parentId": "fld_e69208c176c949f3a17ad7a810b15b1a",
+      "name": "Criar aparelho OK → 201",
+      "method": "POST",
+      "url": "{{ _.base_url }}/aparelhos",
+      "metaSortKey": 11,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"marca\": \"Samsung\",\n  \"modelo\": \"A54\",\n  \"imei\": \"356938035643809\",\n  \"clienteId\": {% response 'body', 'req_870c329bf4be4aa18d61c4d83970b321', 'b64::JC5pZA==::46b', 'never', 60 %}\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "_type": "request_group",
+      "parentId": "wrk_3a668e05ec4244e1ab961794c5e13ce6",
+      "name": "2. Ordem de serviço",
+      "metaSortKey": 12
+    },
+    {
+      "_id": "req_d6e5cc6a70434d4e82e4bfba67f76a54",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T8 · Abrir OS com previsão 2026-11-25 (ver campo previsao)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/ordens",
+      "metaSortKey": 13,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"clienteId\": {% response 'body', 'req_870c329bf4be4aa18d61c4d83970b321', 'b64::JC5pZA==::46b', 'never', 60 %},\n  \"aparelhoId\": {% response 'body', 'req_5280249ce9554d4d8ce9fbb770a57f1c', 'b64::JC5pZA==::46b', 'never', 60 %},\n  \"defeito\": \"Tela quebrada após queda\",\n  \"previsao\": \"2026-11-25\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_bc9ab402dbe54d609f57e7c04142824b",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T4 · Adicionar 2× Troca de tela",
+      "method": "POST",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/itens",
+      "metaSortKey": 14,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"servicoId\": {% response 'body', 'req_90135223f81e40aa99ff7bfdd0a17571', 'b64::JC5pZA==::46b', 'never', 60 %},\n  \"quantidade\": 2\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_43caa2813a80497fa79a6e51e1087ec8",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T4 · Adicionar 1× Troca de bateria (total esperado 820.50)",
+      "method": "POST",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/itens",
+      "metaSortKey": 15,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"servicoId\": {% response 'body', 'req_69a1e54a559d44e781422cf9db95750f', 'b64::JC5pZA==::46b', 'never', 60 %},\n  \"quantidade\": 1\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_0cfdbaf9118b4bb9a0560efaedaf30f3",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "Ver OS com itens",
+      "method": "GET",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}",
+      "metaSortKey": 16,
+      "headers": [],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_e40250f92f574f198c1cfee461c04681",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T5 · Remover 1º item (total esperado 120.50)",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/itens/{% response 'body', 'req_0cfdbaf9118b4bb9a0560efaedaf30f3', 'b64::JC5pdGVuc1swXS5pZA==::46b', 'never', 60 %}",
+      "metaSortKey": 17,
+      "headers": [],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_15932df1e58d4186a47f318222d6e93a",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T10a · Pular ABERTA → ENTREGUE → 400",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 18,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"ENTREGUE\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_70899a7654de4736b3b1642a4c3f85fb",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Status → EM_ANALISE",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 19,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"EM_ANALISE\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_0b40f3c72a0b4848878a30d572b46108",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Status → AGUARDANDO_APROVACAO",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 20,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"AGUARDANDO_APROVACAO\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_c9559554d5034482bced2c0a418c93ef",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Status → EM_CONSERTO",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 21,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"EM_CONSERTO\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_ddc3790a4ae445a4a777c26c8e3f901f",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Status → PRONTA",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 22,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"PRONTA\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_6b4e8e89ae5d4913b14051582f10cd5f",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Status → ENTREGUE",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 23,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"ENTREGUE\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_fbc2208a619c48aa9626bf08ba2cac00",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T10 · Voltar ENTREGUE → ABERTA → 400",
+      "method": "PATCH",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/status",
+      "metaSortKey": 24,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"status\": \"ABERTA\"\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_68ed3f1b19664afa8654025ff6ab7f26",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T12 · Adicionar item em OS entregue → 400",
+      "method": "POST",
+      "url": "{{ _.base_url }}/ordens/{% response 'body', 'req_d6e5cc6a70434d4e82e4bfba67f76a54', 'b64::JC5pZA==::46b', 'never', 60 %}/itens",
+      "metaSortKey": 25,
+      "headers": [
+        {
+          "name": "Content-Type",
+          "value": "application/json"
+        }
+      ],
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n  \"servicoId\": {% response 'body', 'req_90135223f81e40aa99ff7bfdd0a17571', 'b64::JC5pZA==::46b', 'never', 60 %},\n  \"quantidade\": 1\n}"
+      },
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_3a2460cc29764989b112951a2d04a301",
+      "_type": "request",
+      "parentId": "fld_6c47a61ec3b14b3a936d762073df6da0",
+      "name": "T6 · Dashboard (faturamentoMes deve incluir 120.50)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/dashboard",
+      "metaSortKey": 26,
+      "headers": [],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "fld_71345e621f5647ea83b454c8e46416a2",
+      "_type": "request_group",
+      "parentId": "wrk_3a668e05ec4244e1ab961794c5e13ce6",
+      "name": "3. Casos de erro (rodar por último)",
+      "metaSortKey": 27
+    },
+    {
+      "_id": "req_908c6233c19e4bc1b0df8781cb7e20dd",
+      "_type": "request",
+      "parentId": "fld_71345e621f5647ea83b454c8e46416a2",
+      "name": "T7 · Excluir cliente com aparelho → 400",
+      "method": "DELETE",
+      "url": "{{ _.base_url }}/clientes/{% response 'body', 'req_870c329bf4be4aa18d61c4d83970b321', 'b64::JC5pZA==::46b', 'never', 60 %}",
+      "metaSortKey": 28,
+      "headers": [],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    },
+    {
+      "_id": "req_76e51490a9d04ee2a4a7a5a0155c553a",
+      "_type": "request",
+      "parentId": "fld_71345e621f5647ea83b454c8e46416a2",
+      "name": "T9 · GET /ordens/abc → esperado 400/404 (suspeita: API cai)",
+      "method": "GET",
+      "url": "{{ _.base_url }}/ordens/abc",
+      "metaSortKey": 29,
+      "headers": [],
+      "body": {},
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_c2d5a995d6654e93a04dd6c70f5bc4a4', 'b64::JC50b2tlbg==::46b', 'never', 60 %}"
+      }
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, sans-serif; background: #f1f5f9; color: #0f172a; }
+header { padding: 12px 20px; background: #1e293b; color: #fff; display: flex; gap: 18px; align-items: center; }
+header a { color: #cbd5e1; text-decoration: none; }
+header a.active { color: #fff; font-weight: 600; }
+header .sair { margin-left: auto; }
+main { padding: 20px; max-width: 1100px; margin: 0 auto; }
+.card { background: #fff; border-radius: 8px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 3px #0001; }
+form.linha { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+input, select, textarea, button { padding: 8px 10px; border: 1px solid #cbd5e1; border-radius: 6px; font: inherit; }
+button { background: #2563eb; color: #fff; border: none; cursor: pointer; }
+button.secundario { background: #e2e8f0; color: #0f172a; }
+button.perigo { background: #dc2626; }
+table { width: 100%; border-collapse: collapse; background: #fff; }
+th, td { padding: 8px 10px; border-bottom: 1px solid #e2e8f0; text-align: left; }
+.badge { padding: 2px 8px; border-radius: 999px; font-size: 12px; background: #e2e8f0; }
+.badge.ENTREGUE { background: #bbf7d0; } .badge.CANCELADA { background: #fecaca; }
+.badge.PRONTA { background: #bfdbfe; } .badge.EM_CONSERTO { background: #fde68a; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.numero { font-size: 28px; font-weight: 700; }
+.login { max-width: 360px; margin: 80px auto; }
+.login form { display: flex; flex-direction: column; gap: 10px; }

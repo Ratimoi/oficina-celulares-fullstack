@@ -1,0 +1,98 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum StatusOS {
+  ABERTA
+  EM_ANALISE
+  AGUARDANDO_APROVACAO
+  EM_CONSERTO
+  PRONTA
+  ENTREGUE
+  CANCELADA
+}
+
+model Usuario {
+  id        Int            @id @default(autoincrement())
+  nome      String         @db.VarChar(60)
+  email     String         @unique @db.VarChar(80)
+  senha     String         @db.VarChar(80)
+  createdAt DateTime       @default(now())
+  ordens    OrdemServico[]
+
+  @@map("usuarios")
+}
+
+model Cliente {
+  id        Int            @id @default(autoincrement())
+  nome      String         @db.VarChar(60)
+  telefone  String         @db.VarChar(20)
+  email     String?        @db.VarChar(80)
+  cpf       String?        @unique @db.VarChar(14)
+  createdAt DateTime       @default(now())
+  aparelhos Aparelho[]
+  ordens    OrdemServico[]
+
+  @@map("clientes")
+}
+
+model Aparelho {
+  id        Int            @id @default(autoincrement())
+  marca     String         @db.VarChar(30)
+  modelo    String         @db.VarChar(40)
+  imei      String?        @db.VarChar(20)
+  cor       String?        @db.VarChar(20)
+  clienteId Int
+  cliente   Cliente        @relation(fields: [clienteId], references: [id])
+  ordens    OrdemServico[]
+
+  @@map("aparelhos")
+}
+
+model Servico {
+  id        Int               @id @default(autoincrement())
+  descricao String            @db.VarChar(60)
+  preco     Decimal           @db.Decimal(9, 2)
+  ativo     Boolean           @default(true)
+  itens     OrdemServicoItem[]
+
+  @@map("servicos")
+}
+
+model OrdemServico {
+  id             Int                @id @default(autoincrement())
+  defeito        String             @db.VarChar(255)
+  diagnostico    String?            @db.VarChar(255)
+  status         StatusOS           @default(ABERTA)
+  valorTotal     Decimal            @default(0) @db.Decimal(9, 2)
+  dataEntrada    DateTime           @default(now())
+  previsao       DateTime?
+  dataEntrega    DateTime?
+  clienteId      Int
+  cliente        Cliente            @relation(fields: [clienteId], references: [id])
+  aparelhoId     Int
+  aparelho       Aparelho           @relation(fields: [aparelhoId], references: [id])
+  usuarioId      Int
+  usuario        Usuario            @relation(fields: [usuarioId], references: [id])
+  itens          OrdemServicoItem[]
+
+  @@map("ordens_servico")
+}
+
+model OrdemServicoItem {
+  id        Int          @id @default(autoincrement())
+  ordemId   Int
+  ordem     OrdemServico @relation(fields: [ordemId], references: [id], onDelete: Cascade)
+  servicoId Int
+  servico   Servico      @relation(fields: [servicoId], references: [id])
+  quantidade Int         @default(1)
+  preco     Decimal      @db.Decimal(9, 2)
+
+  @@map("ordens_servico_itens")
+}
