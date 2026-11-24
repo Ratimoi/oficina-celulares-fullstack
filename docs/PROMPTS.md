@@ -1,5 +1,7 @@
 # Registro de prompts (para a apresentação)
 
+**Conversa completa com a IA (Claude):** https://claude.ai/share/5433ee90-e994-4e66-b69b-5590d1acdb32
+
 Formato: data · IA · prompt · o que gerou · funcionou? · ajustes feitos
 
 ## 1 — 23/11 · Claude
